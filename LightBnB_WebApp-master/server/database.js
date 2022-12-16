@@ -158,9 +158,30 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function (property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
-}
+  const owner_id = property.owner_id
+  const title = property.title
+  const description = property.description
+  const thumbnail_photo_url = property.thumbnail_photo_url
+  const cover_photo_url = property.cover_photo_url
+  const cost_per_night = property.cost_per_night
+  const street = property.street
+  const city = property.city
+  const province = property.province
+  const post_code = property.post_code
+  const country = property.country
+  const parking_spaces = property.parking_spaces
+  const number_of_bathrooms = property.number_of_bathrooms
+  const number_of_bedrooms = property.number_of_bedrooms
+  const active = true
+  return pool
+    .query(`INSERT INTO properties (title, description, owner_id, cover_photo_url, thumbnail_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, active, province, city, country, street, post_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *;`, [title, description, owner_id, cover_photo_url, thumbnail_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, active, province, city, country, street, post_code])
+    .then((result) => {
+      console.log('users', result.rows[0]);
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
 exports.addProperty = addProperty;
